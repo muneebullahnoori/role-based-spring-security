@@ -17,7 +17,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("user not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("user not found"));
         return new SecurityUserDetails(user);
     }
 }

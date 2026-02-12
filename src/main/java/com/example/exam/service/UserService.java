@@ -6,6 +6,7 @@ import com.example.exam.model.Role;
 import com.example.exam.model.User;
 import com.example.exam.repository.RoleRepository;
 import com.example.exam.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +15,12 @@ import java.util.List;
 public class UserService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(RoleRepository roleRepository, UserRepository userRepository) {
+    public UserService(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserResponseDto create(UserCreatDto dto) {
@@ -30,6 +33,7 @@ public class UserService {
     public List<UserResponseDto> getAll() {
         List<User> all = userRepository.findAll();
         List<UserResponseDto> list = all.stream().map(this::mapToResponseDto).toList();
+        System.out.println("IT IS RUNNING CORRECTLY "+list);
         return list;
     }
 
@@ -37,7 +41,7 @@ public class UserService {
     private User mapToEntity(UserCreatDto dto) {
         User user = new User();
         user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setEmail(dto.getEmail());
         List<Role> allById = roleRepository.findAllById(dto.getRoleIds());
         user.setRoles(allById);

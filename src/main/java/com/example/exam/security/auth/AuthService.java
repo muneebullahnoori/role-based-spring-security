@@ -36,7 +36,6 @@ public class AuthService {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword())
             );
-            System.out.println("Authentication passed!");
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
@@ -52,7 +51,6 @@ public class AuthService {
 
         String access = jwtService.generateToken(user.getEmail(), roles, TokenType.ACCESS);
         String refresh = jwtService.generateToken(user.getEmail(), List.of(), TokenType.REFRESH);
-
         return new AuthResponse(access, refresh, "Bearer", roles);
     }
 }

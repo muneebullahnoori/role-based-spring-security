@@ -26,11 +26,7 @@ public class SecurityConfig {
                 .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth->auth
                         .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/provinces/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/provinces/**").hasAuthority("getAllProvinces")
-                        .requestMatchers(HttpMethod.GET,"/api/toll-plazas/**").hasAuthority("getAllTollPlazas")
-                        .requestMatchers("/api/toll-plazas/**").permitAll()
-                        .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/users").hasAuthority("Manager")
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
